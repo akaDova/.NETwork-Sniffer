@@ -4,9 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SnifferLTS"
+        xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Button x:Name="buttonStart" Content="Start Capture" HorizontalAlignment="Left" Margin="192,329,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStart_Click"/>
+        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Margin="549,329,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStop_Click"/>
+        <ComboBox x:Name="comBoxDevices" HorizontalAlignment="Left" Margin="301,52,0,0" VerticalAlignment="Top" Width="200"/>
+        <ListView ItemsSource="{DynamicResource ResourceKey=packets}" x:Name="listViewPackets" HorizontalAlignment="Left" Height="196" Margin="148,111,0,0" VerticalAlignment="Top" Width="509" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" AutomationProperties.Name="listViewPackets">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Protocol}">Protocol</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Time}" Width="100">Time</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=From}" Width="100">From</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=To}" Width="100">To</GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.Resources>
+                <col:ArrayList x:Key="packets">
+                    <!--<local:ArrivedPacket Protocol="" />-->
+
+
+                </col:ArrayList>
+            </ListView.Resources>
+        </ListView>
+
     </Grid>
 </Window>
