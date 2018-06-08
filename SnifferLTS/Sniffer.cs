@@ -72,82 +72,94 @@ namespace SnifferLTS
         {
             if (Device == null || IsCapturing)
                 return;
+
             IsCapturing = true;
-            Device.OnPacketArrival += new PacketArrivalEventHandler(MainWindow.OnPacketArrivalDevice); ;
+            Device.OnPacketArrival += new PacketArrivalEventHandler(OnPacketArrivalDevice); ;
             Device.Open(DeviceMode.Promiscuous, 1000);
             Device.StartCapture();
             
         }
 
         private static bool IsCapturing = false;
-        
 
-        //private static void OnPacketArrivalDevice(object sender, CaptureEventArgs e)
-        //{
-        //    Packet packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
-        //    //ArrayList list = (ArrayList)MainWindow.ListViewPackets.ItemsSource;
-        //    //MainWindow.ListViewPackets.ItemsSource
-        //    var list = MainWindow.Packets;
-        //    while (packet != null)
-        //    {
-        //        Type t = packet.GetType();
-        //        if (t == typeof(UdpPacket))
-        //        {
-        //            UdpPacket p = (UdpPacket)packet;
-        //            list.Add(new ArrivedPacket("IPv6", e.Packet.Timeval.ToString(), p.DestinationPort.ToString(), p.SourcePort.ToString()));
-        //        }
-        //        else if (t == typeof(TcpPacket))
-        //        {
-        //            TcpPacket p = (TcpPacket)packet;
-        //            list.Add(new ArrivedPacket("TCP", e.Packet.Timeval.ToString(), p.DestinationPort.ToString(), p.SourcePort.ToString()));
-        //        }
-        //        else if (t == typeof(ARPPacket))
-        //        {
-        //            ARPPacket p = (ARPPacket)packet;
-        //            list.Add(new ArrivedPacket("ARP", e.Packet.Timeval.ToString(), p.SenderProtocolAddress.ToString(), p.TargetProtocolAddress.ToString()));
-        //        }
 
-                
-        //        else if (t == typeof(IPv4Packet))
-        //        {
-        //            IPv4Packet p = (IPv4Packet)packet;
-        //            list.Add(new ArrivedPacket("IPv4", e.Packet.Timeval.ToString(), p.DestinationAddress.ToString(), p.SourceAddress.ToString()));
-        //        }
-        //        else if (t == typeof(IPv6Packet))
-        //        {
-        //            IPv6Packet p = (IPv6Packet)packet;
-        //            list.Add(new ArrivedPacket("IPv6", e.Packet.Timeval.ToString(), p.DestinationAddress.ToString(), p.SourceAddress.ToString()));
-        //        }
-        //        else if (t == typeof(EthernetPacket))
-        //        {
+        private static void OnPacketArrivalDevice(object sender, CaptureEventArgs e)
+        {
+            if (!IsCapturing)
+                return;
+            Packet packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
+            //ArrayList list = (ArrayList)MainWindow.ListViewPackets.ItemsSource;
+            //MainWindow.ListViewPackets.ItemsSource
+            var list = MainWindow.Packets;
+            while (packet != null)
+            {
+                Type t = packet.GetType();
+                if (t == typeof(UdpPacket))
+                {
+                    UdpPacket p = (UdpPacket)packet;
+                    AddItem(new ArrivedPacket { PacketData = p, Protocol = "UDP", Time = e.Packet.Timeval.ToString(), From = p.DestinationPort.ToString(), To = p.SourcePort.ToString() });
+                }
+                else if (t == typeof(TcpPacket))
+                {
+                    TcpPacket p = (TcpPacket)packet;
+                    AddItem(new ArrivedPacket { PacketData = p, Protocol = "TCP", Time = e.Packet.Timeval.ToString(), From = p.DestinationPort.ToString(), To = p.SourcePort.ToString() });
+                }
+                else if (t == typeof(ARPPacket))
+                {
+                    ARPPacket p = (ARPPacket)packet;
+                    AddItem(new ArrivedPacket { PacketData = p, Protocol = "ARP", Time = e.Packet.Timeval.ToString(), From = p.SenderProtocolAddress.ToString(), To = p.TargetProtocolAddress.ToString() });
+                }
 
-        //            EthernetPacket p = (EthernetPacket)packet;
-        //            list.Add(new ArrivedPacket("Ethernet", e.Packet.Timeval.ToString(), p.DestinationHwAddress.ToString(), p.SourceHwAddress.ToString()));
-        //        }
-        //        //else
-        //        //{
 
-        //        //}
-        //        packet = packet.PayloadPacket;
-        //        MainWindow.mainWindow.listViewPackets.ItemsSource = list;
-        //    }
-            
+                else if (t == typeof(IPv4Packet))
+                {
+                    IPv4Packet p = (IPv4Packet)packet;
+                    AddItem(new ArrivedPacket { PacketData = p, Protocol = "IPv4", Time = e.Packet.Timeval.ToString(), From = p.DestinationAddress.ToString(), To = p.SourceAddress.ToString() });
+                }
+                else if (t == typeof(IPv6Packet))
+                {
+                    IPv6Packet p = (IPv6Packet)packet;
+                    AddItem(new ArrivedPacket{ PacketData = p, Protocol = "IPv6", Time = e.Packet.Timeval.ToString(), From = p.DestinationAddress.ToString(), To = p.SourceAddress.ToString() });
+                }
+                else if (t == typeof(EthernetPacket))
+                {
+
+                    EthernetPacket p = (EthernetPacket)packet;
+                    AddItem(new ArrivedPacket { PacketData = p, Protocol = "Ethernet", Time = e.Packet.Timeval.ToString(), From = p.DestinationHwAddress.ToString(), To = p.SourceHwAddress.ToString() });
+                }
+                //else if (t == typeof(ICMPv4Packet))
+                //{
+
+                //    ICMPv4Packet p = (ICMPv4Packet)packet;
+                //    AddItem(new ArrivedPacket { Protocol = "ICMPv4", Time = e.Packet.Timeval.ToString(), From = p..ToString(), To = p.SourceHwAddress.ToString() });
+                //}
+                //else
+                //{
+
+                //}
+                packet = packet.PayloadPacket;
+                /*MainWindow.mainWindow.listViewPackets.Items.Add*/;
+            }
+
             //MainWindow.ListViewPackets.Resources.
 
-            //DateTime time = e.Packet.Timeval.Date;
-            ////(PacketDotNet.TcpPacket)e.Packet.Extract()
-            //Packet packet = Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
+            
 
-            //Type t = packet.GetType();
-            //if (t == typeof(TcpPacket))
-            //{
-            //    int len = e.Packet.Data.Length;
-            //    Console.WriteLine("{0}:{1}:{2},{3} Len={4}", time.Hour, time.Minute, time.Second, time.Millisecond, len);
-            //    Console.WriteLine(packet.ToString(StringOutputType.Colored));
-            //}
+        }
 
-        //}
+        static void AddItem(ArrivedPacket packet)
+        {
+            if (!MainWindow.ListViewPackets.Items.CheckAccess())
+            {
+                MainWindow.ListViewPackets.Items.Dispatcher.Invoke(new Action<ArrivedPacket>(AddItem), packet);
+            }
+            else
+            {
+                MainWindow.ListViewPackets.Items.Add(packet);               
+            }
+        }
 
-        //private Type
+
     }
+
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PacketDotNet;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,12 @@ namespace SnifferLTS
             Time = time;
             From = from;
             To = to;
+        }
+
+        public Packet PacketData
+        {
+            get;
+            set;
         }
 
         public ArrivedPacket()

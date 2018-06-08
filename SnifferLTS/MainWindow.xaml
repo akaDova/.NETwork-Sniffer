@@ -6,12 +6,16 @@
         xmlns:local="clr-namespace:SnifferLTS"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="829" ResizeMode="NoResize">
     <Grid>
-        <Button x:Name="buttonStart" Content="Start Capture" HorizontalAlignment="Left" Margin="192,329,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStart_Click"/>
-        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Margin="549,329,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStop_Click"/>
-        <ComboBox x:Name="comBoxDevices" HorizontalAlignment="Left" Margin="301,52,0,0" VerticalAlignment="Top" Width="200"/>
-        <ListView ItemsSource="{DynamicResource ResourceKey=packets}" x:Name="listViewPackets" HorizontalAlignment="Left" Height="196" Margin="148,111,0,0" VerticalAlignment="Top" Width="509" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" AutomationProperties.Name="listViewPackets">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="773*"/>
+            <ColumnDefinition Width="41*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="buttonStart" Content="Start Capture" HorizontalAlignment="Left" Margin="192,375,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStart_Click"/>
+        <Button x:Name="buttonStop" Content="Stop" HorizontalAlignment="Left" Margin="547,375,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStop_Click"/>
+        <ComboBox x:Name="comBoxDevices" HorizontalAlignment="Left" Margin="304,18,0,0" VerticalAlignment="Top" Width="200"/>
+        <ListView  x:Name="listViewPackets" Margin="4,58,4.4,188" SelectionMode="Single" IsSynchronizedWithCurrentItem="True" AutomationProperties.Name="listViewPackets" SelectionChanged="ListViewPackets_SelectionChanged" Grid.ColumnSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Protocol}">Protocol</GridViewColumn>
@@ -20,14 +24,11 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=To}" Width="100">To</GridViewColumn>
                 </GridView>
             </ListView.View>
-            <ListView.Resources>
-                <col:ArrayList x:Key="packets">
-                    <!--<local:ArrivedPacket Protocol="" />-->
 
-
-                </col:ArrayList>
-            </ListView.Resources>
         </ListView>
+        <Button x:Name="buttonClear" Content="Clear" HorizontalAlignment="Left" Margin="370,375,0,0" VerticalAlignment="Top" Width="75" Click="ButtonClear_Click"/>
+        <TextBox x:Name="textBoxPacket" IsReadOnly="True" Height="109" Margin="4,237,378.8,0" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxPacket1" IsReadOnly="True" Height="109" Margin="407,237,4.4,0" TextWrapping="Wrap" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
